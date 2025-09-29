@@ -7,7 +7,7 @@ def menu():
        [5] Nova Conta 
        [6] Listar Contas
        [0] Sair  \n""")
-    return input(menu)
+    return input(modelo_menu)
 
 def realizar_deposito(saldo_disponivel, deposito, extrato, /):
     if deposito > 0:
@@ -138,5 +138,6 @@ def main():
 
         else:
             print("Operação inválida! Tente novamente")
+
 
 main()
