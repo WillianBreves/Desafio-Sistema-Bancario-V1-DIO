@@ -10,16 +10,16 @@ def menu():
     """)
     return input(modelo_menu + "\nEscolha: ")
 
-def realizar_deposito(saldo_disponivel, deposito, historico, /):
+def realizar_deposito(saldo_disponivel, deposito, extrato, /):
     if deposito > 0:
         saldo_disponivel += deposito
-        historico += f"Depósito: R${deposito:.2f}\n"
+        extrato += f"Depósito: R${deposito:.2f}\n"
         print("Depósito realizado com sucesso!")
     else:
         print("Não foi possível concluir a operação! Tente novamente!")
-    return saldo_disponivel, historico
+    return saldo_disponivel, extrato
 
-def realizar_saque(*, saldo_disponivel, saque, historico, limite_de_valor, numero_saques, limite_saques):
+def realizar_saque(*, saldo_disponivel, saque, extrato, limite_de_valor, numero_saques, limite_saques):
     exceder_limite = saque > limite_de_valor
     exceder_saldo = saque > saldo_disponivel
     exceder_saques = numero_saques >= limite_saques
@@ -32,17 +32,17 @@ def realizar_saque(*, saldo_disponivel, saque, historico, limite_de_valor, numer
         print("Você atingiu seu limite de saques! Tente novamente amanhã.")
     elif saque > 0:
         saldo_disponivel -= saque
-        historico += f"Saque: R${saque:.2f}\n"
+        extrato += f"Saque: R${saque:.2f}\n"
         numero_saques += 1
         print("Saque realizado com sucesso!")
     else:
         print("Não foi possível concluir a operação!")
 
-    return saldo_disponivel, historico, numero_saques
+    return saldo_disponivel, extrato, numero_saques
 
-def mostrar_extrato(saldo_disponivel, /, *, historico):
+def mostrar_extrato(saldo_disponivel, /, *, extrato):
     print("=========== Extrato ===========")
-    print("Não houve movimentações na conta" if not historico else historico, end="")
+    print("Não houve movimentações na conta" if not extrato else extrato, end="")
     print(f"Saldo: R${saldo_disponivel:.2f}")
     print("================================")
 
@@ -88,7 +88,7 @@ def main():
 
     saldo = 2000.0
     limite_de_valor = 500.0
-    historico = ""
+    extrato = ""
     numero_saques = 0
     usuarios = []
     contas = []
@@ -98,21 +98,21 @@ def main():
 
         if opcao_menu == "1":
             deposito = float(input("Informe o valor do depósito: "))
-            saldo, historico = realizar_deposito(saldo, deposito, historico)
+            saldo, extrato = realizar_deposito(saldo, deposito, extrato)
 
         elif opcao_menu == "2":
             saque = float(input("Informe o valor do saque: "))
-            saldo, historico, numero_saques = realizar_saque(
+            saldo, extrato, numero_saques = realizar_saque(
                 saldo_disponivel=saldo,
                 saque=saque,
-                historico=historico,
+                extrato=extrato,
                 limite_de_valor=limite_de_valor,
                 numero_saques=numero_saques,
                 limite_saques=LIMITE_SAQUES,
             )
 
         elif opcao_menu == "3":
-            mostrar_extrato(saldo, historico=historico)
+            mostrar_extrato(saldo, extrato=extrato)
 
         elif opcao_menu == "4":
             criar_usuario(usuarios)
@@ -132,6 +132,5 @@ def main():
 
         else:
             print("Operação inválida! Tente novamente.")
+main()
 
-if __name__ == "__main__":
-    main()
